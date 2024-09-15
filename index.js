@@ -3,7 +3,7 @@ var client_id = Date.now();
 document.querySelector("#ws-id").textContent = client_id;
 
 // Establish WebSocket connection using the unique client ID
-var ws = new WebSocket(`ws://127.0.0.1:8000/ws/${client_id}`);
+var ws = new WebSocket(`ws://https://api.render.com/deploy/srv-crjhq9e8ii6s73fgi0v0?key=PTnQ0sDrlR4/ws/${client_id}`);
 var statusElement = document.getElementById('status');
 var userList = document.getElementById('userList');
 
