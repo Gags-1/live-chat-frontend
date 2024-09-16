@@ -3,7 +3,7 @@ var client_id = Date.now();
 document.querySelector("#ws-id").textContent = client_id;
 
 // Establish WebSocket connection using the unique client ID
-var ws = new WebSocket(`https://live-chat-app-backend-au8y.onrender.com/ws/${client_id}`);
+var ws = new WebSocket(`wss://live-chat-app-backend-au8y.onrender.com/ws/${client_id}`);
 var statusElement = document.getElementById('status');
 var userList = document.getElementById('userList');
 // Store online users
