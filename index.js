@@ -1,11 +1,14 @@
-// Generate a unique client ID using the current timestamp
-var client_id = Date.now();
+// Prompt the user to enter a username
+var client_id = prompt("Enter a username");
+
+// Display the username on the webpage
 document.querySelector("#ws-id").textContent = client_id;
 
-// Establish WebSocket connection using the unique client ID
-var ws = new WebSocket(`wss://live-chat-app-backend-au8y.onrender.com/ws/${client_id}`);
+// Establish WebSocket connection using the username as the client ID
+var ws = new WebSocket(`ws://127.0.0.1:8000/ws/${client_id}`);
 var statusElement = document.getElementById('status');
 var userList = document.getElementById('userList');
+
 // Store online users
 var onlineUsers = {};
 
