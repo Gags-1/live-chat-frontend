@@ -5,7 +5,7 @@ var client_id = prompt("Enter a username");
 document.querySelector("#ws-id").textContent = client_id;
 
 // Establish WebSocket connection using the username as the client ID
-var ws = new WebSocket(`ws://live-chat-frontend-j8b3.onrender.com/ws/${client_id}`);
+var ws = new WebSocket(`https://live-chat-app-backend-au8y.onrender.com/ws/${client_id}`);
 var statusElement = document.getElementById('status');
 var userList = document.getElementById('userList');
 
