@@ -1,4 +1,6 @@
-function login() {
+function login(event) {
+    event.preventDefault();  // Prevent form from reloading the page
+
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
@@ -6,10 +8,11 @@ function login() {
     formData.append('username', username);
     formData.append('password', password);
 
-    fetch('wss://live-chat-app-backend-au8y.onrender.com/login', {
+    // Fetching from FastAPI login endpoint
+    fetch('http://127.0.0.1:8000/login', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: formData
     })
@@ -21,12 +24,11 @@ function login() {
     })
     .then(data => {
         const token = data.access_token;
-
         // Store the token in localStorage
         localStorage.setItem('token', token);
 
-        // Redirect to admin panel
-        window.location.href = 'admin_panel.html';
+        // Redirect to the index page after successful login
+        window.location.href = 'index.html';
     })
     .catch(error => {
         alert('Invalid username or password');
