@@ -13,9 +13,10 @@
             <img src="Logo.png" alt="Synapse Logo">
             <h1>Synapse</h1>
         </div>
-        
+
         <h2>Login</h2>
-        <form onsubmit="login(event)">
+        <!-- Updated form -->
+        <form id="loginForm">
             <input type="text" id="username" placeholder="Username or Email" required>
             <input type="password" id="password" placeholder="Password" required>
             <button type="submit">Login</button>
@@ -23,6 +24,59 @@
         <p>Don't have an account? <br><a href="register.html">Register here</a></p>
     </div>
 
-    <script src="login.js"></script>
+    <!-- JavaScript to handle login functionality -->
+    <script>
+        // Function to handle form submission
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            // Get the form data
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Check if both username and password are provided
+            if (!username || !password) {
+                alert('Please enter both username and password');
+                return;
+            }
+
+            // Prepare the form data for sending to the server
+            const formData = new URLSearchParams();
+            formData.append('username', username);
+            formData.append('password', password);
+
+            // Send the login request to the backend using fetch
+            fetch('http://127.0.0.1:8000/login', { // Ensure backend URL is correct
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: formData.toString() // Ensure formData is properly serialized
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Login failed');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const token = data.access_token;
+
+                if (!token) {
+                    throw new Error('No token received');
+                }
+
+                // Store the token in localStorage
+                localStorage.setItem('token', token);
+
+                // Redirect to the homepage after successful login
+                window.location.href = 'index.html';
+            })
+            .catch(error => {
+                alert('Invalid username or password');
+                console.error('Login error:', error);
+            });
+        });
+    </script>
 </body>
 </html>

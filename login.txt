@@ -1,0 +1,52 @@
+function login() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    // Check if username or password is missing
+    if (!username || !password) {
+        alert("Please enter both username and password");
+        return;
+    }
+
+    const formData = new URLSearchParams();
+    formData.append('username', username);
+    formData.append('password', password);
+
+    // Log formData to ensure it's correctly formatted
+    console.log("Form Data:", formData.toString());
+
+    fetch('http://127.0.0.1:8000/login', { // Make sure the URL is correct
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: formData.toString() // Ensure formData is passed as a string
+    })
+    .then(response => {
+        // Check for a valid HTTP response
+        if (!response.ok) {
+            console.error("Server Response Error:", response.status, response.statusText);
+            throw new Error(`Login failed with status ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Ensure the data contains an access token
+        const token = data.access_token;
+
+        if (!token) {
+            throw new Error('No token received from server');
+        }
+
+        // Store the token in localStorage
+        localStorage.setItem('token', token);
+
+        // Redirect to homepage
+        window.location.href = 'homepage.html';
+    })
+    .catch(error => {
+        // Log the error to the console for debugging
+        console.error("Login Error:", error);
+        alert('Invalid username or password, or there was an error processing your request');
+    });
+}
