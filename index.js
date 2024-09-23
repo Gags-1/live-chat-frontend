@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.querySelector("#ws-id").textContent = username;
 
         // Initialize WebSocket globally
-        ws = new WebSocket(`http://live-chat-app-backend-au8y.onrender.com/ws?token=${token}`);
+        ws = new WebSocket(`https://live-chat-app-backend-au8y.onrender.com/ws?token=${token}`);
         const statusElement = document.getElementById('status');
         const userList = document.getElementById('userList');
         let onlineUsers = {};
