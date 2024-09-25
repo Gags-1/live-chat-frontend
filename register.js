@@ -13,7 +13,7 @@ function register(event) {
     };
 
     // Send the user data to the FastAPI endpoint
-    fetch('https://live-chat-app-backend-au8y.onrender.com/users/', {
+    fetch('http://127.0.0.1:8000/users/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
