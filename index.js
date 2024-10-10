@@ -12,9 +12,10 @@ document.addEventListener("DOMContentLoaded", () => {
             document.querySelector("#ws-id").textContent = username;
 
             // Initialize WebSocket globally
-            ws = new WebSocket(`https://live-chat-app-backend-au8y.onrender.com/ws?token=${token}`);
+            ws = new WebSocket(`http://127.0.0.1:8000/ws?token=${token}`);
             const statusElement = document.getElementById('status');
             const userList = document.getElementById('userList');
+            const friendList = document.getElementById('friendList'); // Get the friend list element
             let onlineUsers = {};
 
             // Handle incoming WebSocket messages
@@ -33,15 +34,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 } else {
                     addMessageToChat(message);
                 }
-            };
-
-            // WebSocket onclose event handler
-            ws.onclose = function() {
-                statusElement.textContent = "Connection closed.";
-                document.getElementById('disconnectBtn').disabled = true;
-
-                delete onlineUsers[username];
-                updateOnlineUsers();
             };
 
             // Function to update online users
@@ -75,12 +67,55 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Attach the sendMessage function to the form submission
             document.querySelector('.chat-form').addEventListener('submit', sendMessage);
+
+            // Fetch and display friends list
+            fetchAndDisplayFriendsList();
+
         } catch (error) {
             // If token is invalid or parsing fails, redirect to login page
             window.location.href = 'login.html';
         }
     }
 });
+
+// Function to fetch friends list and update the UI
+async function fetchAndDisplayFriendsList() {
+    try {
+        const response = await fetch("http://127.0.0.1:8000/friends", {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem('token')}`,
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error fetching friends: ${response.status} ${response.statusText}`);
+        }
+
+        const friends = await response.json();
+        const friendList = document.getElementById("friendList");
+
+        // Clear the friend list before adding new content
+        friendList.innerHTML = '';
+
+        // Check if friends list is empty
+        if (friends.length === 0) {
+            friendList.innerHTML = '<li>No friends found.</li>';
+            return;
+        }
+
+        // Append each friend to the friend list
+        friends.forEach(friend => {
+            const friendElement = document.createElement('li');
+            friendElement.innerHTML = `👤 ${friend.username}`;  // Display friend username
+            friendList.appendChild(friendElement);
+        });
+
+    } catch (error) {
+        console.error("Failed to fetch the friends list:", error);
+    }
+}
 
 // Function to disconnect the WebSocket
 function disconnect() {

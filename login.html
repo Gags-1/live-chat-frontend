@@ -15,7 +15,6 @@
         </div>
 
         <h2>Login</h2>
-        <!-- Updated form -->
         <form id="loginForm">
             <input type="text" id="username" placeholder="Username or Email" required>
             <input type="password" id="password" placeholder="Password" required>
@@ -24,53 +23,45 @@
         <p>Don't have an account? <br><a href="register.html">Register here</a></p>
     </div>
 
-    <!-- JavaScript to handle login functionality -->
     <script>
-        // Function to handle form submission
         document.getElementById('loginForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent default form submission
+            event.preventDefault();
 
-            // Get the form data
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            // Check if both username and password are provided
             if (!username || !password) {
                 alert('Please enter both username and password');
                 return;
             }
 
-            // Prepare the form data for sending to the server
             const formData = new URLSearchParams();
             formData.append('username', username);
             formData.append('password', password);
 
-            // Send the login request to the backend using fetch
-            fetch(`https://live-chat-app-backend-au8y.onrender.com/login`, { // Ensure backend URL is correct
+            fetch(`http://127.0.0.1:8000/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
-                body: formData.toString() // Ensure formData is properly serialized
+                body: formData.toString()
             })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Login failed');
+                    return response.json().then(error => {
+                        throw new Error(error.detail || 'Login failed');
+                    });
                 }
                 return response.json();
             })
             .then(data => {
                 const token = data.access_token;
-
                 if (!token) {
                     throw new Error('No token received');
                 }
 
-                // Store the token in localStorage
                 localStorage.setItem('token', token);
-
-                // Redirect to the homepage after successful login
-                window.location.href = 'index.html';
+                window.location.href = 'index.html'; // Redirect after successful login
             })
             .catch(error => {
                 alert('Invalid username or password');
