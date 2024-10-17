@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // Function to fetch friends list and update the UI
 async function fetchAndDisplayFriendsList() {
     try {
-        const response = await fetch("http://127.0.0.1:8000/friends", {
+        const response = await fetch("https://live-chat-frontend-j8b3.onrender.com/friends", {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem('token')}`,
