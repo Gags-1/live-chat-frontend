@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
             document.querySelector("#ws-id").textContent = username;
 
             // Initialize WebSocket globally
-            ws = new WebSocket(`https://live-chat-frontend-j8b3.onrender.com/ws?token=${token}`);
+            ws = new WebSocket(`https://live-chat-app-backend-au8y.onrender.com/ws?token=${token}`);
             const statusElement = document.getElementById('status');
             const userList = document.getElementById('userList');
             const friendList = document.getElementById('friendList'); // Get the friend list element
@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // Function to fetch friends list and update the UI
 async function fetchAndDisplayFriendsList() {
     try {
-        const response = await fetch("https://live-chat-frontend-j8b3.onrender.com/friends", {
+        const response = await fetch("https://live-chat-app-backend-au8y.onrender.com/friends", {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem('token')}`,
